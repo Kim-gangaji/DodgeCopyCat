@@ -1,37 +1,33 @@
 using UnityEngine;
-using Polyperfect.Universal; // PlayerMovement ³×ÀÓ½ºÆäÀÌ½º
+using Polyperfect.Universal;
 
+[RequireComponent(typeof(Rigidbody), typeof(Collider))]
 public class Bullet : MonoBehaviour
 {
-    public float speed = 8f;
-    public float lifeTime = 5f;  // ÃÑ¾Ë Á¸Àç ½Ã°£
+    public float speed = 20f;
     private Rigidbody rb;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.linearVelocity = transform.forward * speed;
+        rb.useGravity = false;
         rb.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        rb.linearVelocity = transform.forward * speed;
 
-        Destroy(gameObject, lifeTime); // ÀÏÁ¤ ½Ã°£ µÚ »èÁ¦
+        Destroy(gameObject, 5f);
     }
 
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        // ÇÃ·¹ÀÌ¾î ¸ÂÀ¸¸é Áï»ç Ã³¸®
-        if (collision.collider.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player"))
         {
-            PlayerMovement player = collision.collider.GetComponent<PlayerMovement>();
+            PlayerMovement player = collision.gameObject.GetComponent<PlayerMovement>();
             if (player != null)
             {
-                player.TakeDamage(); // Áï»ç
+                player.Die();
             }
-            Destroy(gameObject); // ¸ÂÀ¸¸é »èÁ¦
+            Destroy(gameObject);
         }
-
-        // º®ÀÌ³ª ´Ù¸¥ ¿ÀºêÁ§Æ®¿¡ ¸ÂÀ¸¸é ¹°¸® Æ¨±è
-        // Rigidbody + Physic Material·Î ÀÚµ¿ ¹İ»ç
-        // ÇÊ¿ä½Ã ¼Óµµ º¸Á¤:
-        // rb.velocity = rb.velocity.magnitude * rb.velocity.normalized; // Æ¨±è ÈÄ ¼Óµµ ÀÏÁ¤ÇÏ°Ô À¯Áö
+        // ë²½ì€ Physics Materialë¡œ íŠ•ê¹€
     }
 }
