@@ -57,7 +57,7 @@ namespace Polyperfect.Universal
         {
             if (!isGameActive) return;
             isGameActive = false;
-            resultText.text = "Game Over! Press R to Retry";
+            resultText.text = "Game Over! \nPress R to Retry";
         }
 
         public void PlayerWon()
@@ -73,8 +73,13 @@ namespace Polyperfect.Universal
                 PlayerPrefs.SetFloat("BestTime", bestTime);
             }
 
-            resultText.text = $"Victory! Time: {timer:F2}\nBest: {bestTime:F2}\nPress Enter to Restart";
+            // 정수로 변환해서 출력
+            int currentTime = Mathf.FloorToInt(timer);      // 또는 RoundToInt
+            int bestTimeInt = Mathf.FloorToInt(bestTime);   // 또는 RoundToInt
+
+            resultText.text = $"Victory! \nTime: {currentTime}\nBest: {bestTimeInt}\nPress Enter to Restart";
         }
+
 
         private void RestartGame()
         {
